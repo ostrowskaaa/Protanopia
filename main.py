@@ -12,9 +12,9 @@ request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, Permi
 
 Builder.load_string("""
 <Button>:
-    size: 180, 140
-    size_hint: None, None  # (0.5,0.5) the widget would be 50% of the parent
-    font_size: 15
+    size: 220, 140
+    size_hint: None, None
+    font_size: 60
     color: 0.2, 0.5, 0.6, 1
     background_normal: ''
     background_color: .15, .15, .15, 1
@@ -33,10 +33,8 @@ Builder.load_string("""
             cols: 3
 
             RelativeLayout:
-                ToggleButton:
+                Button:
                     text: 'Upload'
-                    font_size: 60
-                    size_hint: None,None
                     size: 260, 140
                     pos_hint: {'center_x': 0.45, 'center_y': .35}
                     on_press:
@@ -45,18 +43,14 @@ Builder.load_string("""
             RelativeLayout:
                 Button:
                     text: 'About'
-                    font_size: 60
-                    size_hint: None,None
                     size: 260, 140
                     pos_hint: {'center_x': 0.5, 'center_y': .35}
                     on_press:
                         root.manager.transition.direction = 'left'
                         root.manager.current = 'about'
             RelativeLayout:
-                ToggleButton:
+                utton:
                     text: 'Camera'
-                    font_size: 60
-                    size_hint: None,None
                     size: 260, 140
                     pos_hint: {'center_x': 0.55, 'center_y': .35}
                     on_press:
@@ -67,12 +61,9 @@ Builder.load_string("""
             RelativeLayout:
                 Button:
                     text: 'Quit'
-                    font_size: 80
                     color: 0.7, 0.5, 0.6, 1
-                    on_press: app.stop()
-                    size_hint: None,None
-                    size: 210, 140
                     pos_hint: {'center_x': 0.5, 'center_y': .15}
+                    on_press: app.stop()
 
 
 <CameraClick>:
@@ -80,6 +71,7 @@ Builder.load_string("""
     Camera:
         id: camera
         resolution: (1920, 1080)
+        pos_hint: {'center_x': 0.5, 'center_y': .5}
         allow_stretch: True
         play: True
         canvas.before:
@@ -95,73 +87,60 @@ Builder.load_string("""
             Button:
                 text: 'Capture'
                 font_size: 50
-                size_hint: None, None
-            	size: 220, 140
                 pos_hint: {'center_x': 0.45, 'center_y': .05}
                 on_press: root.capture()
         RelativeLayout:
             Button:
                 text: 'Back'
-        		font_size: 50
-        		size: 220, 140
-        		size_hint: None, None
-        		pos_hint: {'center_x': 0.65, 'center_y': .05}
+        		pos_hint: {'center_x': 0.55, 'center_y': .05}
         		on_press:
         		    root.manager.transition.direction = 'right'
         		    root.manager.current = 'menu'
 
 <Upload>:
     FloatLayout:
+        Image:
+            id: image
+            size: 640,480
+            pos_hint: {'center_x': 0.5, 'center_y': .5}
+            source: ''
         BoxLayout:
-            Image:
-                id: image
-                size: 640,480
-                source: ''
             RelativeLayout:
                 Button:
                     text: 'Choose photo'
-                    font_size: 70
                     size: 440, 140
-                    size_hint: None,None
-                    pos_hint: {'center_x': 0.45, 'center_y': .15}
+                    pos_hint: {'center_x': 0.5, 'center_y': .05}
                     on_press: root.show_load_list()
 
             RelativeLayout:
                 Button:
                 	text: 'Back'
-                    font_size: 80
-                    size: 220, 140
-                    size_hint: None,None
-                    pos_hint: {'center_x': 0.55, 'center_y': .15}
+                    pos_hint: {'center_x': 0.55, 'center_y': .05}
                 	on_press:
                 	    root.manager.transition.direction = 'right'
                 	    root.manager.current = 'menu'
 
 <UploadDialog>:
-    BoxLayout:
+    FloatLayout:
         size: root.size
         pos: root.pos
-        orientation: "vertical"
+        orientation: 'vertical'
         FileChooserIconView:
             id: filechooser
-            rootpath: '/storage/emulated/0/'
-    BoxLayout:
-        Button:
-            text: "Cancel"
-            font_size: 80
-            size: 220,140
-            size_hint: None,None
-            pos_hint: {'center_x': 0.55, 'center_y': .05}
-            on_press: root.cancel()
-        Button:
-            text: "Load"
-            font_size: 80
-            size: 220,140
-            size_hint: None,None
-            pos_hint: {'center_x': 0.55, 'center_y': .05}
-            on_press:
-                root.load(filechooser.selection)
-                root.cancel()
+            rootpath: '/storage/emulated/0/'    # for android
+        BoxLayout:
+            RelativeLayout:
+                Button:
+                    text: 'Cancel'
+                    pos_hint: {'center_x': 0.45, 'center_y': .05}
+                    on_press: root.cancel()
+            RelativeLayout:
+                Button:
+                    text: 'Load'
+                    pos_hint: {'center_x': 0.55, 'center_y': .05}
+                    on_press:
+                        root.load(filechooser.selection)
+                        root.cancel()
 
 <About>:
     FloatLayout:
@@ -181,9 +160,6 @@ Builder.load_string("""
             RelativeLayout:
                 Button:
                     text: 'Back'
-                    font_size: 80
-                    size: 220, 140
-                    size_hint: None, None
                     pos_hint: {'center_x': 0.5, 'center_y': .35}
                     on_press:
                         root.manager.transition.direction = 'right'
@@ -208,7 +184,7 @@ class Upload(Screen):
         cancel = ObjectProperty(None)
         def show_load_list(self):
             content = UploadDialog(load=self.load_list, cancel=self.dismiss_popup)
-            self._popup = Popup(title="Load a file list", content=content, size_hint=(1, 1))
+            self._popup = Popup(title='Load a file list', content=content, size_hint=(1, 1))
             self._popup.open()
 
         def load_list(self, filename):
