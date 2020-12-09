@@ -7,6 +7,9 @@ from kivy.properties import ObjectProperty
 
 import time
 
+from PIL import Image
+import numpy as np
+
 from android.permissions import request_permissions, Permission
 request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
 
@@ -49,7 +52,7 @@ Builder.load_string("""
                         root.manager.transition.direction = 'left'
                         root.manager.current = 'about'
             RelativeLayout:
-                utton:
+                Button:
                     text: 'Camera'
                     size: 260, 140
                     pos_hint: {'center_x': 0.55, 'center_y': .35}
@@ -127,7 +130,7 @@ Builder.load_string("""
         orientation: 'vertical'
         FileChooserIconView:
             id: filechooser
-            rootpath: '/storage/emulated/0/'    # for android
+            rootpath: '/storage/emulated/0/'    # path for android
         BoxLayout:
             RelativeLayout:
                 Button:
@@ -173,7 +176,7 @@ class CameraClick(Screen):
     def capture(self):
         camera = self.ids['camera']
         timestr = time.strftime('%Y%m%d_%H%M')
-        camera.export_to_png('/sdcard/img_{}.png'.format(timestr))
+        camera.export_to_png('/sdcard/img_{}.png'.format(timestr)) # path for android
 
 class UploadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -188,7 +191,29 @@ class Upload(Screen):
             self._popup.open()
 
         def load_list(self, filename):
-            try: self.ids.image.source = filename[0]
+            try:
+                img = Image.open(filename[0])
+                # multiplying values to get 'protanopia' version of photo
+                # https://www.cs.cornell.edu/courses/cs1110/2013sp/assignments/assignment3/index.php
+                def protanopia_filter(R, G, B, img):
+                    arr = np.array(img)
+                    r, g, b = arr[:,:,0], arr[:,:,1], arr[:,:,2]
+                    new_color = []
+                    for i in range(len(r)):
+                        Rr, Gg, Bb = R * r[i], G * g[i], B * b[i]
+                        value = Rr + Gg + Bb
+                        new_color.append(value)
+                    return new_color
+
+                r_new = np.uint8(protanopia_filter(0.56667, 0.43333, 0, img))
+                g_new = np.uint8(protanopia_filter(0.55833, 0.44167, 0, img))
+                b_new = np.uint8(protanopia_filter(0, 0.24167, 0.75833, img))
+
+                timestr = time.strftime('%Y%m%d_%H%M')
+                new_img = Image.merge('RGB', (r_new,g_new,b_new))
+                new_img.save('/sdcard/img_'+timestr+'.jpg')
+                #cv2.imwrite('/sdcard/img_'+timestr+'.jpg', cv2.merge((r_new,g_new,b_new)))
+                self.ids.image.source = '/sdcard/img_'+timestr+'.jpg'
             except: pass
 
 
