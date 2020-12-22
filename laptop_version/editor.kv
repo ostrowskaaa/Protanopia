@@ -1,0 +1,152 @@
+#: import ew kivy.uix.effectwidget
+<Button>:
+    size: 110, 60
+    size_hint: None, None
+    font_size: 30
+    color: .5, .5, .6, 1
+    background_normal: ''
+    background_color: .35, .36, .45, 1
+
+<ScreenManager>:
+    canvas.before:
+        Color:
+            rgba: .22, .22, .28, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<MenuScreen>:
+    FloatLayout:
+        BoxLayout:
+            Label:
+                text: 'welcome to the world\nof colour blindness'
+                text_size: self.width, None
+                color: .5, .5, .6, 1
+                font_size: 60
+                pos_hint: {'center_x': 0.5, 'center_y': .65}
+                size_hint: (0.2,0.2)
+                padding: (50,50)
+        BoxLayout:
+            cols: 3
+            RelativeLayout:
+                Button:
+                    text: 'Upload'
+                    pos_hint: {'center_x': 0.45, 'center_y': .25}
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'upload'
+            RelativeLayout:
+                Button:
+                    text: 'About'
+                    pos_hint: {'center_x': 0.5, 'center_y': .25}
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'about'
+            RelativeLayout:
+                Button:
+                    text: 'Camera'
+                    pos_hint: {'center_x': 0.55, 'center_y': .25}
+                    on_press:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'camera'
+        BoxLayout:
+            RelativeLayout:
+                Button:
+                    text: 'Quit'
+                    color: .22, .22, .28, 1
+                    pos_hint: {'center_x': 0.5, 'center_y': .10}
+                    on_press: app.stop()
+
+
+<CameraClick>:
+    orientation: 'vertical'
+    id: camera
+
+    BoxLayout:
+        cols: 2
+        RelativeLayout:
+            Button:
+                text: 'Capture'
+                font_size: 50
+                pos_hint: {'center_x': 0.45, 'center_y': .05}
+                on_press: root.capture()
+        RelativeLayout:
+            Button:
+                text: 'Back'
+        		pos_hint: {'center_x': 0.55, 'center_y': .05}
+        		on_press:
+        		    root.manager.transition.direction = 'right'
+        		    root.manager.current = 'menu'
+<Upload>:
+    FloatLayout:
+        Image:
+            id: image
+            size: 640,480
+            pos_hint: {'center_x': 0.5, 'center_y': .5}
+            source: ''
+        BoxLayout:
+            cols: 2
+            RelativeLayout:
+                Button:
+                    text: 'Choose photo'
+                    size: 200, 60
+                    pos_hint: {'center_x': 0.5, 'center_y': .05}
+                    on_press:
+                        root.show_load_list()
+                        image.source: ''
+            RelativeLayout:
+                Button:
+                	text: 'Back'
+                    pos_hint: {'center_x': 0.55, 'center_y': .05}
+                	on_press:
+                	    root.manager.transition.direction = 'right'
+                	    root.manager.current = 'menu'
+<UploadDialog>:
+    FloatLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+        FileChooserIconView:
+            id: filechooser
+            rootpath: ''   
+        BoxLayout:
+            RelativeLayout:
+                Button:
+                    text: 'Cancel'
+                    pos_hint: {'center_x': 0.45, 'center_y': .05}
+                    on_press: root.cancel()
+            RelativeLayout:
+                Button:
+                    text: 'Load'
+                    pos_hint: {'center_x': 0.55, 'center_y': .05}
+                    on_press:
+                        root.load(filechooser.selection)
+                        root.cancel()
+<About>:
+    FloatLayout:
+        orientation: 'vertical'
+        size: self.parent.size
+        pos: self.parent.pos
+        BoxLayout:
+            Label:
+                text: 'Protanopia is an inability to see the red colour due to the absence of the red retina photoreceptors. It is genetic and affects much more often men than women.\nThe goal of this app is to show how people with protanopia see the wolrd.'
+                text_size: self.width, None
+                color: .5, .5, .6, 1
+                font_size: 40
+                halign: 'justify'
+                pos_hint: {'center_x': 0.5, 'center_y': .65}
+                size_hint: (0.2,0.2)
+                padding: (40,40)
+        BoxLayout:
+            Image:
+                source: 'protanopia_wheel.jpg'
+                size_hint: None, 0.4
+                pos_hint: {'center_x': 0.5, 'center_y': .35}
+        BoxLayout:
+            RelativeLayout:
+                Button:
+                    text: 'Back'
+                    pos_hint: {'center_x': 0.5, 'center_y': .05}
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'menu'
