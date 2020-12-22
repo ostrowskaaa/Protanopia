@@ -52,6 +52,7 @@
                     on_press:
                         root.manager.transition.direction = 'left'
                         root.manager.current = 'camera'
+
         BoxLayout:
             RelativeLayout:
                 Button:
@@ -59,6 +60,7 @@
                     color: .22, .22, .28, 1
                     pos_hint: {'center_x': 0.5, 'center_y': .15}
                     on_press: app.stop()
+
 
 <CameraClick>:
     orientation: 'vertical'
@@ -90,6 +92,7 @@
         		on_press:
         		    root.manager.transition.direction = 'right'
         		    root.manager.current = 'menu'
+
 <Upload>:
     FloatLayout:
         Image:
@@ -98,7 +101,6 @@
             pos_hint: {'center_x': 0.5, 'center_y': .5}
             source: ''
         BoxLayout:
-            cols: 2
             RelativeLayout:
                 Button:
                     text: 'Choose photo'
@@ -107,6 +109,7 @@
                     on_press:
                         root.show_load_list()
                         image.source: ''
+
             RelativeLayout:
                 Button:
                 	text: 'Back'
@@ -114,6 +117,7 @@
                 	on_press:
                 	    root.manager.transition.direction = 'right'
                 	    root.manager.current = 'menu'
+
 <UploadDialog>:
     FloatLayout:
         size: root.size
@@ -121,8 +125,7 @@
         orientation: 'vertical'
         FileChooserIconView:
             id: filechooser
-            #rootpath: '/storage/emulated/0/'    # for android
-            rootpath: ''    # for windows
+            rootpath: '/storage/emulated/0/'    # path for android
         BoxLayout:
             RelativeLayout:
                 Button:
@@ -136,6 +139,7 @@
                     on_press:
                         root.load(filechooser.selection)
                         root.cancel()
+
 <About>:
     FloatLayout:
         orientation: 'vertical'
@@ -143,19 +147,25 @@
         pos: self.parent.pos
         BoxLayout:
             Label:
-                text: 'Protanopia is an inability to see the red colour due to the absence of the red retina photoreceptors. It is genetic and affects much more often men than women.\nThe goal of this app is to show how people with protanopia see the wolrd.'
+                text: 'Protanopia is an inability to see the red colour due to the absence of the red retina photoreceptors. It is genetic and affects much more often men than women.\nThis app goal is to show how people with protanopia see the world.'
                 text_size: self.width, None
-                color: .5, .5, .6, 1
                 font_size: 60
+                color: .5, .5, .6, 1
                 halign: 'justify'
                 pos_hint: {'center_x': 0.5, 'center_y': .65}
                 size_hint: (0.2,0.2)
-                padding: (40,40)
+                padding: (40,20)
+        BoxLayout:
+            Image:
+                source: 'data/color_wheel.jpg'
+                allow_stretch: True
+                size: 400, 240
+                pos_hint: {'center_x': 0.5, 'center_y': .35}
         BoxLayout:
             RelativeLayout:
                 Button:
                     text: 'Back'
-                    pos_hint: {'center_x': 0.5, 'center_y': .35}
+                    pos_hint: {'center_x': 0.5, 'center_y': .05}
                     on_press:
                         root.manager.transition.direction = 'right'
                         root.manager.current = 'menu'
