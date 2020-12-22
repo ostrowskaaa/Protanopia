@@ -70,17 +70,10 @@
 <CameraScreen>:
     orientation: 'vertical'
     BoxLayout:
-        cols: 2
-        RelativeLayout:
-            Button:
-                text: 'Capture'
-                size: 150, 50
-                pos_hint: {'center_x': 0.45, 'center_y': .05}
-                on_press: root.capture()
         RelativeLayout:
             Button:
                 text: 'Back'
-        		pos_hint: {'center_x': 0.55, 'center_y': .05}
+        		pos_hint: {'center_x': 0.5, 'center_y': .05}
         		on_press:
         		    root.manager.transition.direction = 'right'
         		    root.manager.current = 'menu'

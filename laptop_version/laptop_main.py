@@ -29,10 +29,12 @@ class CameraWidget(Image):
         super(CameraWidget, self).__init__(**kwargs)
         self.capture = cv2.VideoCapture(0)
         Clock.schedule_interval(self.update, 1.0/33.0)
+        Fra = None
 
     def update(self, dt):
         ret, frame = self.capture.read()
         buf1 = frame
+        self.Fra = buf1
         r_new = np.uint8(protanopia_filter(0.56667, 0.43333, 0, buf1))
         g_new = np.uint8(protanopia_filter(0.55833, 0.44167, 0, buf1))
         b_new = np.uint8(protanopia_filter(0, 0.24167, 0.75833, buf1))
@@ -48,11 +50,6 @@ class CameraScreen(Screen):
         super(CameraScreen, self).__init__(**kwargs)
         self.camera = CameraWidget()
         self.add_widget(self.camera)
-
-    def capture(self):
-        camera = self.ids['camera']
-        timestr = time.strftime('%Y%m%d_%H%M')
-        camera.export_to_png('/img_{}.png'.format(timestr)) #for android should be sdcard
 
 class UploadDialog(FloatLayout):
     load = ObjectProperty(None)
