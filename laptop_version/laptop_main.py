@@ -13,10 +13,6 @@ from PIL import Image
 import numpy as np
 import cv2
 
-# for android
-#from android.permissions import request_permissions, Permission
-#request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
-
 Builder.load_file('editor.kv')
 
 class MenuScreen(Screen):
@@ -26,7 +22,7 @@ class CameraClick(Screen):
     def capture(self):
         camera = self.ids['camera']
         timestr = time.strftime('%Y%m%d_%H%M')
-        camera.export_to_png('/sdcard/img_{}.png'.format(timestr)) #for android
+        camera.export_to_png('/img_{}.png'.format(timestr)) #for android
 
 class UploadDialog(FloatLayout):
     load = ObjectProperty(None)
