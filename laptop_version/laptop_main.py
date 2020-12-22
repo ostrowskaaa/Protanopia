@@ -7,10 +7,11 @@ from kivy.properties import ObjectProperty
 from kivy.uix.image import Image
 from kivy.graphics.texture import Texture
 from kivy.uix.effectwidget import EffectWidget, EffectBase
+from kivy.clock import Clock
 
 import time
 
-from PIL import Image
+from PIL import Image as Im
 import numpy as np
 import cv2
 
@@ -23,7 +24,31 @@ Builder.load_file('editor.kv')
 class MenuScreen(Screen):
     pass
 
-class CameraClick(Screen):
+class CameraWidget(Image):
+    def __init__(self, **kwargs):
+        super(CameraWidget, self).__init__(**kwargs)
+        self.capture = cv2.VideoCapture(0)
+        Clock.schedule_interval(self.update, 1.0/33.0)
+
+    def update(self, dt):
+        ret, frame = self.capture.read()
+        buf1 = frame
+        r_new = np.uint8(protanopia_filter(0.56667, 0.43333, 0, buf1))
+        g_new = np.uint8(protanopia_filter(0.55833, 0.44167, 0, buf1))
+        b_new = np.uint8(protanopia_filter(0, 0.24167, 0.75833, buf1))
+        rgb = np.dstack((r_new,g_new,b_new))
+        buf = rgb.tostring()
+
+        texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='rgb')
+        texture1.blit_buffer(buf, colorfmt='rgb', bufferfmt='ubyte')
+        self.texture = texture1
+
+class CameraScreen(Screen):
+    def __init__(self, **kwargs):
+        super(CameraScreen, self).__init__(**kwargs)
+        self.camera = CameraWidget()
+        self.add_widget(self.camera)
+
     def capture(self):
         camera = self.ids['camera']
         timestr = time.strftime('%Y%m%d_%H%M')
@@ -39,18 +64,18 @@ class Upload(Screen):
 
     def show_load_list(self):
         content = UploadDialog(load=self.load_list, cancel=self.dismiss_popup)
-        self._popup = Popup(title='Load a file list', content=content, size_hint=(1, 1))
+        self._popup = Popup(title='Choose photo to upload', content=content, size_hint=(1, 1))
         self._popup.open()
 
     def load_list(self, path):
         try:
             filename = ('.').join(path[0].split('.')[:-1])
-            img = Image.open(path[0])
+            img = Im.open(path[0])
             r_new = np.uint8(protanopia_filter(0.56667, 0.43333, 0, img))
             g_new = np.uint8(protanopia_filter(0.55833, 0.44167, 0, img))
             b_new = np.uint8(protanopia_filter(0, 0.24167, 0.75833, img))
             rgb = np.dstack((r_new,g_new,b_new))
-            new_img = Image.fromarray(rgb, 'RGB')
+            new_img = Im.fromarray(rgb, 'RGB')
             new_img.save(str(filename) + '_new.jpg')
             self.ids.image.source = str(filename) + '_new.jpg'
         except: pass
@@ -81,7 +106,7 @@ def protanopia_filter(R, G, B, img):
 
 sm = ScreenManager()
 sm.add_widget(MenuScreen(name='menu'))
-sm.add_widget(CameraClick(name='camera'))
+sm.add_widget(CameraScreen(name='camera'))
 sm.add_widget(Upload(name='upload'))
 sm.add_widget(About(name='about'))
 

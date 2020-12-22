@@ -57,23 +57,18 @@
                     pos_hint: {'center_x': 0.5, 'center_y': .10}
                     on_press: app.stop()
 
+<CameraWidget>:
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: -180
+            #angle: -90 # android
+            origin: self.center
+    canvas.after:
+        PopMatrix
 
-
-<CameraClick>:
+<CameraScreen>:
     orientation: 'vertical'
-    Camera:
-        id: camera
-        resolution: (640, 480)
-        pos_hint: {'center_x': 0.5, 'center_y': .5}
-        allow_stretch: True
-        play: True
-        canvas.before:
-            PushMatrix
-            Rotate:
-                #angle: -90 # android
-                origin: self.center
-        canvas.after:
-            PopMatrix
     BoxLayout:
         cols: 2
         RelativeLayout:
