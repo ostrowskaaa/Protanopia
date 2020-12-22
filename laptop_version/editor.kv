@@ -1,6 +1,6 @@
 #: import ew kivy.uix.effectwidget
 <Button>:
-    size: 110, 60
+    size: 110, 50
     size_hint: None, None
     font_size: 30
     color: .5, .5, .6, 1
@@ -58,16 +58,28 @@
                     on_press: app.stop()
 
 
+
 <CameraClick>:
     orientation: 'vertical'
-    id: camera
-
+    Camera:
+        id: camera
+        resolution: (640, 480)
+        pos_hint: {'center_x': 0.5, 'center_y': .5}
+        allow_stretch: True
+        play: True
+        canvas.before:
+            PushMatrix
+            Rotate:
+                #angle: -90 # android
+                origin: self.center
+        canvas.after:
+            PopMatrix
     BoxLayout:
         cols: 2
         RelativeLayout:
             Button:
                 text: 'Capture'
-                font_size: 50
+                size: 150, 50
                 pos_hint: {'center_x': 0.45, 'center_y': .05}
                 on_press: root.capture()
         RelativeLayout:
@@ -89,7 +101,7 @@
             RelativeLayout:
                 Button:
                     text: 'Choose photo'
-                    size: 200, 60
+                    size: 200, 50
                     pos_hint: {'center_x': 0.5, 'center_y': .05}
                     on_press:
                         root.show_load_list()
@@ -108,7 +120,8 @@
         orientation: 'vertical'
         FileChooserIconView:
             id: filechooser
-            rootpath: ''   
+            #rootpath: '/storage/emulated/0/'    # for android
+            rootpath: ''    # for windows
         BoxLayout:
             RelativeLayout:
                 Button:
@@ -132,16 +145,18 @@
                 text: 'Protanopia is an inability to see the red colour due to the absence of the red retina photoreceptors. It is genetic and affects much more often men than women.\nThe goal of this app is to show how people with protanopia see the wolrd.'
                 text_size: self.width, None
                 color: .5, .5, .6, 1
-                font_size: 40
+                font_size: 30
                 halign: 'justify'
-                pos_hint: {'center_x': 0.5, 'center_y': .65}
+                pos_hint: {'center_x': 0.5, 'center_y': .75}
                 size_hint: (0.2,0.2)
                 padding: (40,40)
         BoxLayout:
             Image:
-                source: 'protanopia_wheel.jpg'
-                size_hint: None, 0.4
-                pos_hint: {'center_x': 0.5, 'center_y': .35}
+                source: 'data/color_wheel.jpg'
+                allow_stretch: True
+                size_hint: (0.4,0.4)
+                size: 100, 60
+                pos_hint: {'center_x': 0.5, 'center_y': .33}
         BoxLayout:
             RelativeLayout:
                 Button:
