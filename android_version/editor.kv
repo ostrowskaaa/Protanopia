@@ -27,7 +27,7 @@
                 size_hint: (0.2,0.2)
                 padding: (50,50)
         BoxLayout:
-            cols: 3
+            cols: 2
             RelativeLayout:
                 Button:
                     text: 'Upload'
@@ -40,18 +40,10 @@
                 Button:
                     text: 'About'
                     size: 260, 140
-                    pos_hint: {'center_x': 0.5, 'center_y': .35}
-                    on_press:
-                        root.manager.transition.direction = 'left'
-                        root.manager.current = 'about'
-            RelativeLayout:
-                Button:
-                    text: 'Camera'
-                    size: 260, 140
                     pos_hint: {'center_x': 0.55, 'center_y': .35}
                     on_press:
                         root.manager.transition.direction = 'left'
-                        root.manager.current = 'camera'
+                        root.manager.current = 'about'
 
         BoxLayout:
             RelativeLayout:
@@ -60,38 +52,6 @@
                     color: .22, .22, .28, 1
                     pos_hint: {'center_x': 0.5, 'center_y': .15}
                     on_press: app.stop()
-
-
-<CameraClick>:
-    orientation: 'vertical'
-    Camera:
-        id: camera
-        resolution: (640, 480)
-        pos_hint: {'center_x': 0.5, 'center_y': .5}
-        allow_stretch: True
-        play: True
-        canvas.before:
-            PushMatrix
-            Rotate:
-                angle: -90
-                origin: self.center
-        canvas.after:
-            PopMatrix
-    BoxLayout:
-        cols: 2
-        RelativeLayout:
-            Button:
-                text: 'Capture'
-                font_size: 50
-                pos_hint: {'center_x': 0.45, 'center_y': .05}
-                on_press: root.capture()
-        RelativeLayout:
-            Button:
-                text: 'Back'
-        		pos_hint: {'center_x': 0.55, 'center_y': .05}
-        		on_press:
-        		    root.manager.transition.direction = 'right'
-        		    root.manager.current = 'menu'
 
 <Upload>:
     FloatLayout:

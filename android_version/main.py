@@ -11,18 +11,12 @@ from PIL import Image
 import numpy as np
 
 from android.permissions import request_permissions, Permission
-request_permissions([Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
+request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
 
 Builder.load_file('editor.kv')
 
 class MenuScreen(Screen):
     pass
-
-class CameraClick(Screen):
-    def capture(self):
-        camera = self.ids['camera']
-        timestr = time.strftime('%Y%m%d_%H%M')
-        camera.export_to_png('/sdcard/Download/img_{}.jpg'.format(timestr)) #for android
 
 class UploadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -53,6 +47,13 @@ class Upload(Screen):
     def dismiss_popup(self):
         self._popup.dismiss()
 
+class About(Screen):
+    pass
+
+class ProtanopiaWorld(App):
+    def build(self):
+        return sm
+
 # multuplying values to get 'protanopia' version of photo
 # https://www.cs.cornell.edu/courses/cs1110/2013sp/assignments/assignment3/index.php
 def protanopia_filter(R, G, B, img):
@@ -65,18 +66,10 @@ def protanopia_filter(R, G, B, img):
         new_color.append(value)
     return new_color
 
-class About(Screen):
-    pass
-
 sm = ScreenManager()
 sm.add_widget(MenuScreen(name='menu'))
-sm.add_widget(CameraClick(name='camera'))
 sm.add_widget(Upload(name='upload'))
 sm.add_widget(About(name='about'))
-
-class ProtanopiaWorld(App):
-    def build(self):
-        return sm
 
 if __name__ == '__main__':
     ProtanopiaWorld().run()
