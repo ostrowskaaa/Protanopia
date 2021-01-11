@@ -1,5 +1,5 @@
 #: import ew kivy.uix.effectwidget
-<Button>:
+< Button >:
     size: 110, 50
     size_hint: None, None
     font_size: 30
@@ -7,7 +7,7 @@
     background_normal: ''
     background_color: .35, .36, .45, 1
 
-<ScreenManager>:
+< ScreenManager >:
     canvas.before:
         Color:
             rgba: .22, .22, .28, 1
@@ -15,7 +15,7 @@
             pos: self.pos
             size: self.size
 
-<MenuScreen>:
+< MenuScreen >:
     FloatLayout:
         BoxLayout:
             Label:
@@ -24,8 +24,8 @@
                 color: .5, .5, .6, 1
                 font_size: 60
                 pos_hint: {'center_x': 0.5, 'center_y': .65}
-                size_hint: (0.2,0.2)
-                padding: (50,50)
+                size_hint: (0.2, 0.2)
+                padding: (50, 50)
         BoxLayout:
             cols: 3
             RelativeLayout:
@@ -57,31 +57,32 @@
                     pos_hint: {'center_x': 0.5, 'center_y': .10}
                     on_press: app.stop()
 
-<CameraWidget>:
+< CameraWidget >:
     canvas.before:
         PushMatrix
         Rotate:
             angle: -180
-            #angle: -90 # android
+# angle: -90  android
             origin: self.center
     canvas.after:
         PopMatrix
 
-<CameraScreen>:
+< CameraScreen >:
     orientation: 'vertical'
     BoxLayout:
         RelativeLayout:
             Button:
                 text: 'Back'
-        		pos_hint: {'center_x': 0.5, 'center_y': .05}
-        		on_press:
-        		    root.manager.transition.direction = 'right'
-        		    root.manager.current = 'menu'
-<Upload>:
+                pos_hint: {'center_x': 0.5, 'center_y': .05}
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'menu'
+
+< Upload >:
     FloatLayout:
         Image:
             id: image
-            size: 640,480
+            size: 640, 480
             pos_hint: {'center_x': 0.5, 'center_y': .5}
             source: ''
         BoxLayout:
@@ -96,19 +97,20 @@
                         image.source: ''
             RelativeLayout:
                 Button:
-                	text: 'Back'
+                    text: 'Back'
                     pos_hint: {'center_x': 0.55, 'center_y': .05}
-                	on_press:
-                	    root.manager.transition.direction = 'right'
-                	    root.manager.current = 'menu'
-<UploadDialog>:
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'menu'
+
+< UploadDialog >:
     FloatLayout:
         size: root.size
         pos: root.pos
         orientation: 'vertical'
         FileChooserIconView:
             id: filechooser
-            #rootpath: '/storage/emulated/0/'    # for android
+# rootpath: '/storage/emulated/0/'    # for android
             rootpath: ''    # for windows
         BoxLayout:
             RelativeLayout:
@@ -123,7 +125,7 @@
                     on_press:
                         root.load(filechooser.selection)
                         root.cancel()
-<About>:
+< About >:
     FloatLayout:
         orientation: 'vertical'
         size: self.parent.size
@@ -136,13 +138,13 @@
                 font_size: 30
                 halign: 'justify'
                 pos_hint: {'center_x': 0.5, 'center_y': .75}
-                size_hint: (0.2,0.2)
-                padding: (40,40)
+                size_hint: (0.2, 0.2)
+                padding: (40, 40)
         BoxLayout:
             Image:
                 source: 'data/color_wheel.jpg'
                 allow_stretch: True
-                size_hint: (0.4,0.4)
+                size_hint: (0.4, 0.4)
                 size: 100, 60
                 pos_hint: {'center_x': 0.5, 'center_y': .33}
         BoxLayout:
