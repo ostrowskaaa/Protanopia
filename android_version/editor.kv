@@ -1,4 +1,4 @@
-<Button>:
+< Button >:
     size: 220, 140
     size_hint: None, None
     radius: [(40, 40), (40, 40), (20, 20), (20, 20)]
@@ -7,7 +7,7 @@
     background_normal: ''
     background_color: .35, .36, .45, 1
 
-<ScreenManager>:
+< ScreenManager >:
     canvas.before:
         Color:
             rgba: .22, .22, .28, 1
@@ -15,7 +15,7 @@
             pos: self.pos
             size: self.size
 
-<MenuScreen>:
+< MenuScreen >:
     FloatLayout:
         BoxLayout:
             Label:
@@ -24,8 +24,8 @@
                 color: .5, .5, .6, 1
                 font_size: 80
                 pos_hint: {'center_x': 0.5, 'center_y': .65}
-                size_hint: (0.2,0.2)
-                padding: (50,50)
+                size_hint: (0.2, 0.2)
+                padding: (50, 50)
         BoxLayout:
             cols: 2
             RelativeLayout:
@@ -53,11 +53,11 @@
                     pos_hint: {'center_x': 0.5, 'center_y': .15}
                     on_press: app.stop()
 
-<Upload>:
+< Upload >:
     FloatLayout:
         Image:
             id: image
-            size: 640,480
+            size: 640, 480
             pos_hint: {'center_x': 0.5, 'center_y': .5}
             source: ''
         BoxLayout:
@@ -72,13 +72,13 @@
 
             RelativeLayout:
                 Button:
-                	text: 'Back'
+                    text: 'Back'
                     pos_hint: {'center_x': 0.55, 'center_y': .05}
-                	on_press:
-                	    root.manager.transition.direction = 'right'
-                	    root.manager.current = 'menu'
+                    on_press:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'menu'
 
-<UploadDialog>:
+< UploadDialog >:
     FloatLayout:
         size: root.size
         pos: root.pos
@@ -100,7 +100,7 @@
                         root.load(filechooser.selection)
                         root.cancel()
 
-<About>:
+< About >:
     FloatLayout:
         orientation: 'vertical'
         size: self.parent.size
@@ -113,8 +113,8 @@
                 color: .5, .5, .6, 1
                 halign: 'justify'
                 pos_hint: {'center_x': 0.5, 'center_y': .65}
-                size_hint: (0.2,0.2)
-                padding: (40,20)
+                size_hint: (0.2, 0.2)
+                padding: (40, 20)
         BoxLayout:
             Image:
                 source: 'data/color_wheel.jpg'
